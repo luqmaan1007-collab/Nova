@@ -1,6 +1,3 @@
-program CompilerMain
-
 fn main() {
-    println("Welcome to NOVA Compiler")
-    println("This will compile NOVA programs to machine code")
+    Lexer.tokenize("../examples/hello.nova")
 }
