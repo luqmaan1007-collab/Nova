@@ -1,0 +1,24 @@
+{
+  "name": "NOVA",
+  "scopeName": "source.nova",
+  "fileTypes": ["nova"],
+  "patterns": [
+    {
+      "name": "keyword.control.nova",
+      "match": "\\b(program|fn|let|mut|if|for|println|struct|enum)\\b"
+    },
+    {
+      "name": "string.quoted.double.nova",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "comment.line.nova",
+      "match": "//.*$"
+    },
+    {
+      "name": "constant.numeric.nova",
+      "match": "\\b[0-9]+\\b"
+    }
+  ]
+}
