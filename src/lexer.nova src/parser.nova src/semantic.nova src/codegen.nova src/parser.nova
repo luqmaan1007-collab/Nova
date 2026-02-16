@@ -1,0 +1,5 @@
+program Parser
+
+fn parse(tokens: list) {
+    println("Parser will convert tokens to AST")
+}
