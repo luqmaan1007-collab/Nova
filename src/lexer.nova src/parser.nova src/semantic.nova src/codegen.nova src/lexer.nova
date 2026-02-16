@@ -1,5 +1,10 @@
 program Lexer
 
 fn tokenize(file_path: string) {
-    println("Lexer will read NOVA source and create tokens from: {}", file_path)
+    println("Reading NOVA file: {}", file_path)
+
+    // For now, fake tokenization: split by space
+    let code = read_file(file_path)  // assume read_file returns string
+    let tokens = split(code, " ")    // split by spaces
+    println("Tokens: {}", tokens)
 }
