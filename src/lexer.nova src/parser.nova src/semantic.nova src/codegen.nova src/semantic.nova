@@ -1,0 +1,5 @@
+program Semantic
+
+fn analyze(ast: list) {
+    println("Semantic analysis will check types and ownership rules")
+}
