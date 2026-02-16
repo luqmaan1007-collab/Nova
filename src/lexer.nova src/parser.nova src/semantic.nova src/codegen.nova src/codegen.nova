@@ -1,0 +1,5 @@
+program CodeGen
+
+fn generate(ast: list) {
+    println("CodeGen will turn AST into machine code")
+}
