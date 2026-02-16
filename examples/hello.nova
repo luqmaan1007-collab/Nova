@@ -1,0 +1,5 @@
+program HelloWorld
+
+fn main() {
+    println("Hello, NOVA!")
+}
