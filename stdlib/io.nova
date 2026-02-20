@@ -1,0 +1,52 @@
+# io.nova - Handles user input and live GUI interactions
+
+# Event storage
+key_events = []
+click_events = []
+
+# Register a key press callback
+fn on_key(key, callback) {
+    append(key_events, { "key": key, "callback": callback })
+}
+
+# Register a click/tap callback
+fn on_click(x, y, callback) {
+    append(click_events, { "x": x, "y": y, "callback": callback })
+}
+
+# Create interactive button
+fn create_button(label, x, y, w, h, callback) {
+    obj = {
+        "type": "button",
+        "label": label,
+        "x": x,
+        "y": y,
+        "w": w,
+        "h": h,
+        "callback": callback
+    }
+    append(scene_objects, obj)
+}
+
+# Update events each frame
+fn process_events() {
+    # This is a placeholder
+    # Mobile host or SDL runtime calls this each frame
+    for event in key_events {
+        if host_key_pressed(event["key"]) {
+            event["callback"]()
+        }
+    }
+
+    for event in click_events {
+        if host_click_at(event["x"], event["y"]) {
+            event["callback"]()
+        }
+    }
+}
+
+# Update function — redraw scene + process events
+fn update() {
+    process_events()
+    render_window()  # render_window() comes from graphics.nova
+}
