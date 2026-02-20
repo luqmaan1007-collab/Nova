@@ -1,0 +1,26 @@
+# nova_runtime.nova
+# Full Nova runtime skeleton (self-hosted, AST-based)
+
+import "lexer.nova"
+import "parser.nova"
+import "interpreter.nova"
+import "stdlib/io.nova"
+import "stdlib/graphics.nova"
+
+fn run_file(file_path) {
+    source = read_file(file_path)
+    tokens = tokenize(source)
+    ast = parse_program(tokens)
+    execute_program(ast)
+}
+
+fn main() {
+    println("=== NOVA RUNTIME START ===")
+
+    # Example: run the main program
+    # Replace with actual file path or integrate with mobile GUI later
+    file_path = "examples/car_game.nova"
+    run_file(file_path)
+
+    println("=== NOVA RUNTIME END ===")
+}
