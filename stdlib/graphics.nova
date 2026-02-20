@@ -1,13 +1,49 @@
-# sdl.nova - generic SDL-like library for Nova
-window_width = 80
-window_height = 25
+# sdl.nova - Nova SDL Library with Live Preview
+
+window_width = 800
+window_height = 600
+window_title = "Nova Preview"
 scene_objects = []
+on_key_events = []
+running = true
+platform = "unknown"
+frame_rate = 60
+
+# Detect platform
+fn detect_platform() {
+    sys = get_system()
+    if sys == "android" or sys == "ios" {
+        platform = "mobile"
+    }
+    if sys == "windows" or sys == "linux" or sys == "mac" {
+        platform = "desktop"
+    }
+    if sys == "web" {
+        platform = "web"
+    }
+}
+
+# Register .nova file association so clicking opens preview
+fn register_nova_files() {
+    if platform == "mobile" {
+        register_intent(".nova", "Nova Live Preview")
+    }
+    if platform == "desktop" {
+        register_extension(".nova", "Nova Live Preview")
+    }
+    if platform == "web" {
+        register_handler(".nova", "Nova Live Preview")
+    }
+}
 
 # Create window
 fn create_window(width, height, title) {
     window_width = width
     window_height = height
-    println("=== " + title + " ===")
+    window_title = title
+    detect_platform()
+    register_nova_files()
+    open_window(window_width, window_height, window_title, platform)
 }
 
 # Clear scene
@@ -19,7 +55,7 @@ fn clear_window() {
 fn add_object(type, label, x, y, w, h, color) {
     obj = {
         "type": type,
-        "label": label,  # Could be text, emoji, or sprite name
+        "label": label,
         "x": x,
         "y": y,
         "w": w,
@@ -37,52 +73,105 @@ fn move_object(index, new_x, new_y) {
     }
 }
 
-# Render all objects (ASCII prototype for now)
+# Render all objects based on platform
 fn render_window() {
-    grid = []
-    for y = 0; y < window_height; y = y + 1 {
-        row = []
-        for x = 0; x < window_width; x = x + 1 {
-            append(row, " ")
-        }
-        append(grid, row)
-    }
-
     for obj in scene_objects {
-        x = obj["x"]
-        y = obj["y"]
-        label = obj["label"]
-        if x >= 0 and x < window_width and y >= 0 and y < window_height {
-            grid[y][x] = label
+        if obj["type"] == "rect" {
+            if platform == "mobile" {
+                mobile_draw_rect(obj["x"], obj["y"], obj["w"], obj["h"], obj["color"])
+            }
+            if platform == "desktop" {
+                desktop_draw_rect(obj["x"], obj["y"], obj["w"], obj["h"], obj["color"])
+            }
+            if platform == "web" {
+                web_draw_rect(obj["x"], obj["y"], obj["w"], obj["h"], obj["color"])
+            }
         }
-    }
-
-    for row in grid {
-        println(join("", row))
+        if obj["type"] == "text" {
+            if platform == "mobile" {
+                mobile_draw_text(obj["label"], obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+            if platform == "desktop" {
+                desktop_draw_text(obj["label"], obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+            if platform == "web" {
+                web_draw_text(obj["label"], obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+        }
+        if obj["type"] == "sprite" {
+            if platform == "mobile" {
+                mobile_draw_sprite(obj["label"], obj["x"], obj["y"], obj["w"], obj["h"])
+            }
+            if platform == "desktop" {
+                desktop_draw_sprite(obj["label"], obj["x"], obj["y"], obj["w"], obj["h"])
+            }
+            if platform == "web" {
+                web_draw_sprite(obj["label"], obj["x"], obj["y"], obj["w"], obj["h"])
+            }
+        }
+        if obj["type"] == "circle" {
+            if platform == "mobile" {
+                mobile_draw_circle(obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+            if platform == "desktop" {
+                desktop_draw_circle(obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+            if platform == "web" {
+                web_draw_circle(obj["x"], obj["y"], obj["w"], obj["color"])
+            }
+        }
     }
 }
 
-# Generic draw functions
+# Draw functions
 fn draw_rect(x, y, w, h, color) {
-    add_object("rect", "█", x, y, w, h, color)
+    add_object("rect", "rect", x, y, w, h, color)
+}
+
+fn draw_circle(x, y, radius, color) {
+    add_object("circle", "circle", x, y, radius, radius, color)
 }
 
 fn draw_text(text, x, y, size, color) {
-    add_object("text", text, x, y, 1, 1, color)
+    add_object("text", text, x, y, size, 1, color)
 }
 
-fn create_sprite(image, x, y) {
-    add_object("sprite", image, x, y, 1, 1, "default")
+fn create_sprite(image, x, y, w, h) {
+    add_object("sprite", image, x, y, w, h, "default")
 }
 
-# Input events (placeholders)
-on_key_events = []
+# Input handling
 fn on_key(key, fn_callback) {
-    append(on_key_events, { "key": key, "callback": fn_callback })
+    append(on_key_events, {"key": key, "callback": fn_callback})
 }
 
-# Frame update
+fn handle_input() {
+    key = get_key_press()
+    if key != "" {
+        for event in on_key_events {
+            if event["key"] == key {
+                event["callback"]()
+            }
+        }
+    }
+    touch = get_touch()
+    if touch != "" {
+        handle_touch(touch)
+    }
+}
+
+# Quit
+fn quit() {
+    running = false
+    close_window()
+}
+
+# Frame update - main game loop
 fn update() {
-    clear_window()
-    render_window()
+    while running {
+        handle_input()
+        clear_window()
+        render_window()
+        sleep(1000 / frame_rate)
+    }
 }
