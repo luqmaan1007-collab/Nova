@@ -1,0 +1,36 @@
+# parser.nova
+# Converts tokens to AST
+import "lexer.nova"
+
+fn parse_program(tokens) {
+    ast = []
+    i = 0
+
+    while i < length(tokens) {
+        tok = tokens[i]
+
+        if tok["value"] == "fn" {
+            func_node, i = parse_function(tokens, i)
+            append(ast, func_node)
+            continue
+        }
+
+        expr_node, i = parse_expression(tokens, i)
+        append(ast, expr_node)
+    }
+
+    return ast
+}
+
+fn parse_function(tokens, start_index) {
+    # Simple function parsing
+    name = tokens[start_index + 1]["value"]
+    body = []  # For now we’ll parse expressions inside {}
+    end_index = start_index + 3
+    return { "type": "function", "name": name, "body": body }, end_index
+}
+
+fn parse_expression(tokens, index) {
+    tok = tokens[index]
+    return { "type": "expression", "value": tok["value"] }, index + 1
+}
