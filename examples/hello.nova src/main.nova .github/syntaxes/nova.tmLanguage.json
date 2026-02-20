@@ -5,20 +5,58 @@
   "patterns": [
     {
       "name": "keyword.control.nova",
-      "match": "\\b(program|fn|let|mut|if|for|println|struct|enum)\\b"
+      "match": "\\b(program|fn|let|mut|if|else|for|while|return|break|continue|struct|enum|import|match|switch)\\b"
+    },
+    {
+      "name": "support.function.nova",
+      "match": "\\b(print|println|create_window|create_car|create_button|add_object|move_object|update|input|on_key|on_click|sqrt|pow|sin|cos|tan|random)\\b"
+    },
+    {
+      "name": "variable.other.nova",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+    },
+    {
+      "name": "constant.numeric.nova",
+      "match": "\\b[0-9]+(?:\\.[0-9]+)?\\b"
     },
     {
       "name": "string.quoted.double.nova",
       "begin": "\"",
-      "end": "\""
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.nova",
+          "match": "\\\\."
+        }
+      ]
     },
     {
-      "name": "comment.line.nova",
+      "name": "string.quoted.single.nova",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.nova",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "comment.line.double-slash.nova",
       "match": "//.*$"
     },
     {
-      "name": "constant.numeric.nova",
-      "match": "\\b[0-9]+\\b"
+      "name": "comment.block.nova",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "keyword.operator.nova",
+      "match": "[=+\\-*/%<>!]+"
+    },
+    {
+      "name": "punctuation.separator.nova",
+      "match": "[\\{\\}\\(\\)\\[\\];,\\.:]"
     }
   ]
 }
