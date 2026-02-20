@@ -1,0 +1,63 @@
+# lexer.nova
+# Breaks Nova code into tokens
+
+fn tokenize(source) {
+    tokens = []
+
+    i = 0
+    while i < length(source) {
+        c = source[i]
+
+        if c == " " or c == "\n" or c == "\t" {
+            i = i + 1
+            continue
+        }
+
+        # Keywords and symbols
+        if c in ["(", ")", "{", "}", "+", "-", "*", "/", "=", ","] {
+            append(tokens, { "type": "symbol", "value": c })
+            i = i + 1
+            continue
+        }
+
+        # Identifiers & keywords
+        if is_alpha(c) {
+            start = i
+            while i < length(source) and (is_alpha(source[i]) or is_digit(source[i])) {
+                i = i + 1
+            }
+            word = slice(source, start, i)
+            append(tokens, { "type": "identifier", "value": word })
+            continue
+        }
+
+        # Numbers
+        if is_digit(c) {
+            start = i
+            while i < length(source) and is_digit(source[i]) {
+                i = i + 1
+            }
+            num = slice(source, start, i)
+            append(tokens, { "type": "number", "value": num })
+            continue
+        }
+
+        # Strings
+        if c == '"' {
+            i = i + 1
+            start = i
+            while i < length(source) and source[i] != '"' {
+                i = i + 1
+            }
+            str_val = slice(source, start, i)
+            append(tokens, { "type": "string", "value": str_val })
+            i = i + 1
+            continue
+        }
+
+        # Unknown character
+        error("Unexpected character: " + c)
+    }
+
+    return tokens
+}
