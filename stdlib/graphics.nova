@@ -1,0 +1,88 @@
+# sdl.nova - generic SDL-like library for Nova
+window_width = 80
+window_height = 25
+scene_objects = []
+
+# Create window
+fn create_window(width, height, title) {
+    window_width = width
+    window_height = height
+    println("=== " + title + " ===")
+}
+
+# Clear scene
+fn clear_window() {
+    scene_objects = []
+}
+
+# Add object
+fn add_object(type, label, x, y, w, h, color) {
+    obj = {
+        "type": type,
+        "label": label,  # Could be text, emoji, or sprite name
+        "x": x,
+        "y": y,
+        "w": w,
+        "h": h,
+        "color": color
+    }
+    append(scene_objects, obj)
+}
+
+# Move object
+fn move_object(index, new_x, new_y) {
+    if index >= 0 and index < length(scene_objects) {
+        scene_objects[index]["x"] = new_x
+        scene_objects[index]["y"] = new_y
+    }
+}
+
+# Render all objects (ASCII prototype for now)
+fn render_window() {
+    grid = []
+    for y = 0; y < window_height; y = y + 1 {
+        row = []
+        for x = 0; x < window_width; x = x + 1 {
+            append(row, " ")
+        }
+        append(grid, row)
+    }
+
+    for obj in scene_objects {
+        x = obj["x"]
+        y = obj["y"]
+        label = obj["label"]
+        if x >= 0 and x < window_width and y >= 0 and y < window_height {
+            grid[y][x] = label
+        }
+    }
+
+    for row in grid {
+        println(join("", row))
+    }
+}
+
+# Generic draw functions
+fn draw_rect(x, y, w, h, color) {
+    add_object("rect", "█", x, y, w, h, color)
+}
+
+fn draw_text(text, x, y, size, color) {
+    add_object("text", text, x, y, 1, 1, color)
+}
+
+fn create_sprite(image, x, y) {
+    add_object("sprite", image, x, y, 1, 1, "default")
+}
+
+# Input events (placeholders)
+on_key_events = []
+fn on_key(key, fn_callback) {
+    append(on_key_events, { "key": key, "callback": fn_callback })
+}
+
+# Frame update
+fn update() {
+    clear_window()
+    render_window()
+}
