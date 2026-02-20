@@ -1,0 +1,29 @@
+# interpreter.nova
+import "parser.nova"
+
+fn execute_program(ast) {
+    functions = {}
+    for node in ast {
+        if node["type"] == "function" {
+            functions[node["name"]] = node
+        }
+    }
+
+    # Execute main() if exists
+    if "main" in functions {
+        execute_function(functions["main"], functions)
+    }
+}
+
+fn execute_function(func_node, functions) {
+    for stmt in func_node["body"] {
+        execute_statement(stmt, functions)
+    }
+}
+
+fn execute_statement(stmt, functions) {
+    # For now handle only print
+    if stmt["value"] == "print" {
+        println("Running print()")
+    }
+}
