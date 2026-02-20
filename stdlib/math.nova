@@ -1,0 +1,100 @@
+# math.nova - Standard math library for Nova
+
+# Basic arithmetic
+fn add(a, b) {
+    return a + b
+}
+
+fn subtract(a, b) {
+    return a - b
+}
+
+fn multiply(a, b) {
+    return a * b
+}
+
+fn divide(a, b) {
+    if b == 0 {
+        error("Division by zero")
+    }
+    return a / b
+}
+
+fn modulo(a, b) {
+    return a % b
+}
+
+# Power and roots
+fn pow(base, exponent) {
+    result = 1
+    for i = 0; i < exponent; i = i + 1 {
+        result = result * base
+    }
+    return result
+}
+
+fn sqrt(value) {
+    if value < 0 {
+        error("Square root of negative number")
+    }
+    guess = value / 2
+    for i = 0; i < 20; i = i + 1 {  # Simple approximation
+        guess = (guess + value / guess) / 2
+    }
+    return guess
+}
+
+# Trigonometry (using radians)
+fn sin(x) {
+    # Taylor series approximation (x in radians)
+    term = x
+    sum = x
+    sign = -1
+    for i = 3; i <= 15; i = i + 2 {
+        term = term * x * x / ((i - 1) * i)
+        sum = sum + sign * term
+        sign = sign * -1
+    }
+    return sum
+}
+
+fn cos(x) {
+    return sin(x + 1.57079632679)  # sin(x + π/2)
+}
+
+fn tan(x) {
+    return sin(x) / cos(x)
+}
+
+# Constants
+PI = 3.14159265359
+E = 2.71828182846
+
+# Rounding functions
+fn floor(x) {
+    return x - (x % 1)
+}
+
+fn ceil(x) {
+    f = x - (x % 1)
+    if f == x {
+        return f
+    }
+    return f + 1
+}
+
+fn round(x) {
+    f = floor(x)
+    if x - f >= 0.5 {
+        return f + 1
+    }
+    return f
+}
+
+# Random number generator
+fn random(min, max) {
+    seed = int(time()) % 100000
+    r = (seed * 9301 + 49297) % 233280
+    normalized = r / 233280
+    return min + normalized * (max - min)
+}
