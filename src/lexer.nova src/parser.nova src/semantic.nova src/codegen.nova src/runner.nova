@@ -1,22 +1,28 @@
-# runner.nova
-# ──────────────────────────────
-# Nova Runner
-# Kör .nova filer helt i Nova
-# ──────────────────────────────
-
-import "runtime.nova"
-
 program Runner
 
-fn main() {
-    let runtime = Runtime()
-    runtime.init()
+import "lexer.nova"
+import "parser.nova"
+import "ast.nova"
+import "runtime.nova"
 
-    if len(argv) > 1 {
-        let filename = argv[1]
-        runtime.run_file(filename)
+fn main() {
+    println("Nova Runner v0.1")
+    println("================")
+
+    let input_file = if len(argv) > 1 { argv[1] } else { "input.nova" }
+
+    if file_exists(input_file) {
+        println("Reading: " + input_file)
+        let source = read_file(input_file)
+        println("Lexing...")
+        let tokens = lex(source)
+        println("Parsing...")
+        let nodes = parse(tokens)
+        println("Running...")
+        run(nodes)
+        println("Done!")
     } else {
-        println("Usage: nova runner.nova <file.nova>")
+        println("Error: " + input_file + " not found")
     }
 }
 
