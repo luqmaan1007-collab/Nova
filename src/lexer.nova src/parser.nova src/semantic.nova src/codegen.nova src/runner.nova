@@ -1,0 +1,23 @@
+# runner.nova
+# ──────────────────────────────
+# Nova Runner
+# Kör .nova filer helt i Nova
+# ──────────────────────────────
+
+import "runtime.nova"
+
+program Runner
+
+fn main() {
+    let runtime = Runtime()
+    runtime.init()
+
+    if len(argv) > 1 {
+        let filename = argv[1]
+        runtime.run_file(filename)
+    } else {
+        println("Usage: nova runner.nova <file.nova>")
+    }
+}
+
+main()
