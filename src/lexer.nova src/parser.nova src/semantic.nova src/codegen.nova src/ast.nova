@@ -1,0 +1,115 @@
+# ast.nova
+# ──────────────────────────────
+# AST-noder för Nova-kompilator/runner
+# ──────────────────────────────
+
+program AstNode
+    fn eval(env) {
+        return null
+    }
+
+# Number literal
+program NumberNode
+    let value
+    fn init(val) {
+        value = val
+    }
+    fn eval(env) {
+        return value
+    }
+
+# String literal
+program StringNode
+    let value
+    fn init(val) {
+        value = val
+    }
+    fn eval(env) {
+        return value
+    }
+
+# Variable
+program VarNode
+    let name
+    fn init(n) {
+        name = n
+    }
+    fn eval(env) {
+        if contains(env, name) {
+            return env[name]
+        }
+        println("Error: undefined variable " + name)
+        return null
+    }
+
+# Binary operation
+program BinOpNode
+    let left
+    let op
+    let right
+    fn init(l, o, r) {
+        left = l
+        op = o
+        right = r
+    }
+    fn eval(env) {
+        let lval = left.eval(env)
+        let rval = right.eval(env)
+        if op == "+" { return lval + rval }
+        if op == "-" { return lval - rval }
+        if op == "*" { return lval * rval }
+        if op == "/" { return lval / rval }
+        if op == "==" { return lval == rval }
+        if op == "!=" { return lval != rval }
+        if op == "<" { return lval < rval }
+        if op == ">" { return lval > rval }
+        return null
+    }
+
+# Assignment
+program AssignNode
+    let name
+    let expr
+    fn init(n, e) {
+        name = n
+        expr = e
+    }
+    fn eval(env) {
+        env[name] = expr.eval(env)
+        return env[name]
+    }
+
+# Function call
+program CallNode
+    let fname
+    let args
+    fn init(f, a) {
+        fname = f
+        args = a
+    }
+    fn eval(env) {
+        if contains(env, fname) {
+            let f = env[fname]
+            let evaluated_args = []
+            for a in args {
+                append(evaluated_args, a.eval(env))
+            }
+            return f(evaluated_args)
+        }
+        println("Error: undefined function " + fname)
+        return null
+    }
+
+# Sequence of statements
+program SeqNode
+    let stmts
+    fn init(s) {
+        stmts = s
+    }
+    fn eval(env) {
+        let result = null
+        for s in stmts {
+            result = s.eval(env)
+        }
+        return result
+    }
