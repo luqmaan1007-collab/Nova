@@ -1,5 +1,57 @@
 program Parser
 
-fn parse(tokens: list) {
-    println("Parser will convert tokens to AST")
+import "lexer.nova"
+import "ast.nova"
+
+fn parse(tokens: list) -> list {
+    let i = 0
+    let tok_count = len(tokens)
+    let nodes = []
+
+    while i < tok_count {
+        let tok = tokens[i]
+        let tt = tok_type(tok)
+        let tv = tok_val(tok)
+
+        if tt == "EOF" { break }
+
+        # Variabeldeklaration: let / mut
+        if tt == "KEYWORD" and (tv == "let" or tv == "mut") {
+            i = i + 1
+            let name = tok_val(tokens[i])
+            i = i + 1
+            let value = null
+            if tok_val(tokens[i]) == "=" {
+                i = i + 1
+                value = tok_val(tokens[i])
+                i = i + 1
+            }
+            append(nodes, VarDecl(name, value))
+            continue
+        }
+
+        # Funktionsanrop
+        if tt == "IDENT" {
+            let fname = tv
+            i = i + 1
+            let args = []
+            if tok_val(tokens[i]) == "(" {
+                i = i + 1
+                while tok_val(tokens[i]) != ")" {
+                    append(args, tok_val(tokens[i]))
+                    if tok_val(tokens[i]) == "," {
+                        i = i + 1
+                    }
+                    i = i + 1
+                }
+                i = i + 1
+            }
+            append(nodes, FuncCall(fname, args))
+            continue
+        }
+
+        i = i + 1
+    }
+
+    return nodes
 }
