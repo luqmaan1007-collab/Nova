@@ -1,13 +1,11 @@
 <activity android:name=".MainActivity">
     <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-
-        <!-- Filtyp -->
-        <data android:scheme="file" />
-        <data android:scheme="content" />
-        <data android:mimeType="*/*" />
-        <data android:pathPattern=".*\\.nova" />
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="file"/>
+        <data android:host="*"/>
+        <data android:mimeType="*/*"/>
+        <data android:pathPattern=".*\\.nova"/>
     </intent-filter>
 </activity>
