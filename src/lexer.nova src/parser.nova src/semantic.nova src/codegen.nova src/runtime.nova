@@ -1,0 +1,76 @@
+# runtime.nova
+# ──────────────────────────────
+# Nova Runtime - Kör AST och hanterar miljö
+# ──────────────────────────────
+
+import "ast.nova"
+
+program Runtime
+    let env
+
+    fn init() {
+        env = {}
+        self.load_builtins()
+    }
+
+    # ── Lägg till inbyggda funktioner ──
+    fn load_builtins() {
+        env["print"] = fn(args) {
+            for a in args {
+                println(str(a))
+            }
+            return null
+        }
+        env["println"] = fn(args) {
+            for a in args {
+                println(str(a))
+            }
+            return null
+        }
+        env["str"] = fn(args) {
+            return str(args[0])
+        }
+        env["random"] = fn(args) {
+            return rand() / 1.0
+        }
+        env["read_file"] = fn(args) {
+            let path = args[0]
+            return read_file(path)
+        }
+        env["write_file"] = fn(args) {
+            let path = args[0]
+            let content = args[1]
+            write_file(path, content)
+            return null
+        }
+    }
+
+    # ── Kör en AST ──
+    fn run(ast) {
+        return ast.eval(env)
+    }
+
+    # ── Kör Nova-fil direkt ──
+    fn run_file(filename) {
+        if not file_exists(filename) {
+            println("Error: file not found " + filename)
+            return null
+        }
+        let src = read_file(filename)
+        # Lexer + Parser bör returnera AST
+        let tokens = lex(src)
+        let ast = parse(tokens)  # parse() kommer från parser.nova
+        return self.run(ast)
+    }
+
+# ── Exempel på entry ──
+fn main() {
+    let runtime = Runtime()
+    if len(argv) > 1 {
+        runtime.run_file(argv[1])
+    } else {
+        println("Usage: nova runner.nova <file.nova>")
+    }
+}
+
+main()
