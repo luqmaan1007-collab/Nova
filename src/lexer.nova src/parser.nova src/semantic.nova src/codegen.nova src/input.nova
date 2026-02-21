@@ -1,0 +1,19 @@
+program Test
+
+fn main() {
+    let greeting = "Hello, Nova!"
+    println(greeting)
+
+    let a = 5
+    let b = 7
+    let sum = a + b
+    println("Sum is: " + str(sum))
+
+    if sum > 10 {
+        println("Sum is greater than 10")
+    } else {
+        println("Sum is 10 or less")
+    }
+}
+
+main()
