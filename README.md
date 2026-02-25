@@ -20,8 +20,6 @@ Function declarations
 Statements
 Expressions
 Example:
-Nova
-Kopiera kod
 program main
 
 fn main() {
@@ -63,8 +61,7 @@ Kopiera kod
 let
 4.3 Comments
 Single-line:
-Nova
-Kopiera kod
+
 // This is a comment
 Multi-line:
 Nova
@@ -76,8 +73,7 @@ Kopiera kod
 5. Variables
 Nova uses explicit mutability.
 Immutable variable
-Nova
-Kopiera kod
+
 let x = 10
 Mutable variable
 Nova
@@ -86,7 +82,7 @@ let mut counter = 0
 counter = counter + 1
 6. Data Types
 6.1 Primitive Types
-Kopiera kod
+
 
 int
 float
@@ -101,67 +97,57 @@ let pi: float = 3.14
 let active: bool = true
 let name: string = "Nova"
 Type inference is supported:
-Nova
-Kopiera kod
+
 let x = 5
 7. Functions
 Function Declaration
-Nova
-Kopiera kod
+
 fn add(a: int, b: int) -> int {
     return a + b
 }
 Void Function
-Nova
-Kopiera kod
+
 fn greet() {
     println("Hello")
 }
 8. Control Flow
 8.1 If Statement
-Nova
-Kopiera kod
+
 if x > 10 {
     println("Large")
 } else {
     println("Small")
 }
 8.2 While Loop
-Nova
-Kopiera kod
+
 while x < 10 {
     x = x + 1
 }
 8.3 For Loop
-Nova
-Kopiera kod
+
 for i in 0..10 {
     println(i)
 }
 9. Structs
-Nova
-Kopiera kod
+
 struct User {
     name: string
     age: int
 }
 Usage:
-Nova
-Kopiera kod
+
 let user = User {
     name: "Luqmaan",
     age: 18
 }
 10. Enums
-Nova
-Kopiera kod
 enum Result {
     Ok
     Error
 }
 11. Standard Library (Core)
 Minimum required:
-Kopiera kod
+
 
 println()
 print()
@@ -212,7 +198,7 @@ Async support
 IDE integration
 Nova SDK
 16. Grammar (EBNF Draft)
-Kopiera kod
+
 
 program     ::= "program" IDENT declaration*
 declaration ::= fn_decl | struct_decl | enum_decl | let_stmt
